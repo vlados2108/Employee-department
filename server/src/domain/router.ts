@@ -28,6 +28,7 @@ export const employeeRouter = router({
             position: z.string(),
             department: z.number(),
             salary: z.number(),
+            is_leader: z.boolean()
         }))
         .mutation((req) => {
             const { input } = req;
