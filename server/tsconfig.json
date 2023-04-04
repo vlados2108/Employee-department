@@ -1,17 +1,13 @@
 {
     "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "outDir": "./dist",
-        "strict": true,
-        "esModuleInterop": true,
+        "target": "es2018",
         "experimentalDecorators": true,
-        "emitDecoratorMetadata": true
-    },
-    "include": [
-        "./src/**/*.ts"
-    ],
-    "exclude": [
-        "node_modules"
-    ]
+        "emitDecoratorMetadata": true,
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "strictPropertyInitialization": false,
+        "skipLibCheck": true
+    }
 }
