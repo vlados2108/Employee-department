@@ -12,7 +12,7 @@ export const employeeRouter = router({
     }),
     getEmployeeById: publicProcedure
         .input((val: unknown) => {
-            if (typeof val === "bigint") return val;
+            if (typeof val === "number") return val;
             throw new Error(`Invalid input: ${typeof val}`);
         })
         .query((req) => {
@@ -22,12 +22,12 @@ export const employeeRouter = router({
         }),
     createEmployee: publicProcedure
         .input(z.object({
-            id: z.bigint(),
+            id: z.number(),
             name: z.string(),
             last_name: z.string(),
             position: z.string(),
-            department: z.bigint(),
-            salary: z.bigint(),
+            department: z.number(),
+            salary: z.number(),
         }))
         .mutation((req) => {
             const { input } = req;
@@ -41,7 +41,7 @@ export const departmentRouter = router({
     }),
     getDepartmentById: publicProcedure
         .input((val: unknown) => {
-            if (typeof val === "bigint") return val;
+            if (typeof val === "number") return val;
             throw new Error(`Invalid input: ${typeof val}`);
         })
         .query((req) => {
@@ -51,12 +51,12 @@ export const departmentRouter = router({
         }),
     createDepartment: publicProcedure
         .input(z.object({
-            id: z.bigint(),
+            id: z.number(),
             foundation_date: z.date(),
             description: z.string(),
             name: z.string(),
             company: z.string(),
-            salary: z.bigint(),
+            salary: z.number(),
         }))
         .mutation((req) => {
             const { input } = req;

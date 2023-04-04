@@ -16,7 +16,7 @@ export class Prisma {
     return allEmployees
   }
 
-  async getEployeeById(id: bigint) {
+  async getEployeeById(id: number) {
     const Employee = await this.prisma.employee.findUnique({
       where: { id: id }
     }).catch(async (e) => this.handleError(e))
@@ -35,7 +35,7 @@ export class Prisma {
     return allDepartnents
   }
 
-  async getDepartmentById(id: bigint) {
+  async getDepartmentById(id: number) {
     const Department = await this.prisma.department.findUnique({
       where: { id: id }
     }).catch(async (e) => this.handleError(e))
