@@ -28,6 +28,19 @@ export class Prisma {
       .catch(async (e) => this.handleError(e));
   }
 
+  async deleteEmployeeById(id: number) {
+
+  }
+
+  async getFiveLatestAddedEmployees() {
+    await this.prisma.employee.findMany({
+      where:
+      {
+
+      }
+    })
+  }
+
   /*Department operations*/
   async getDepartments() {
     const allDepartnents = await this.prisma.department.findMany()
@@ -47,6 +60,21 @@ export class Prisma {
       .catch(async (e) => this.handleError(e));
   }
 
+  async deleteDepartmentById(id: number) {
+
+  }
+
+  async getTopFiveDepartments() {
+
+  }
+
+  async getLeaderOfDepartment(depId: number) {
+
+  }
+
+  async getCountOfEmployeesInDepartment(depId: number) {
+
+  }
 
   /*Close db connection*/
   async disconnect() {
