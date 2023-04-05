@@ -1,8 +1,10 @@
 import { Prisma } from "./dbOperations"
 
 const prisma = new Prisma()
-const result = prisma.getCountOfEmployeesInDepartment(1);
 
-result.then(function (res) {
-    console.log(res);
-})
+const a = async () => {
+    const result = await prisma.getTopFiveDepartments();
+    console.log(result);
+}
+
+a();

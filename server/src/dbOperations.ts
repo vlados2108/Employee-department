@@ -1,13 +1,23 @@
 import { Department, Employee, PrismaClient } from '@prisma/client'
-import { number } from 'zod';
 
-
+type topFiveDep = Record<number, number>
 
 export class Prisma {
   prisma: PrismaClient;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient({
+      rejectOnNotFound: {
+        findFirst: {
+          Employee: (err) => new Error('Cant find employee'),
+          Department: (err) => new Error('Cant find department')
+        },
+        findUnique: {
+          Employee: (err) => new Error('Cant find employee'),
+          Department: (err) => new Error('Cant find department')
+        }
+      }
+    });
   }
 
   /*Emloyee operations*/
@@ -39,16 +49,26 @@ export class Prisma {
   }
 
   async deleteEmployeeById(id: number) {
-
+    await this.prisma.employee.delete({
+      where: {
+        id: id
+      }
+    })
   }
 
   async getFiveLatestAddedEmployees() {
-    await this.prisma.employee.findMany({
+    const countOfRecords = await this.prisma.employee.count();
+    const fiveLastAddedEmployees = await this.prisma.employee.findMany({
       where:
       {
-
+        id: {
+          gte: countOfRecords - 5,
+          lte: countOfRecords,
+        }
       }
     })
+      .catch(async (e) => this.handleError(e))
+    return fiveLastAddedEmployees
   }
 
   /*Department operations*/
@@ -61,7 +81,8 @@ export class Prisma {
   async getDepartmentById(id: number) {
     const Department = await this.prisma.department.findUnique({
       where: { id: id }
-    }).catch(async (e) => this.handleError(e))
+    })
+      .catch(async (e) => this.handleError(e))
     return Department
   }
 
@@ -71,39 +92,34 @@ export class Prisma {
   }
 
   async deleteDepartmentById(id: number) {
-
+    await this.prisma.department.delete({
+      where: {
+        id: id
+      }
+    })
+      .catch(async (e) => this.handleError(e));
   }
 
-  async getTopFiveDepartments() {
-    const departmnets = await this.prisma.department.findMany()
-      .catch(async (e) => this.handleError(e))
 
-    let countMap = new Map<number, number>();
-    let countArr: Array<[number, number]> = [];
-    if (departmnets) {
-      departmnets.forEach(async (dep) => {
-        const employeesInDep = await this.prisma.employee.findMany({
+  async getTopFiveDepartments() {
+    const departments = await this.prisma.department.findMany()
+      .catch((e) => this.handleError(e))
+
+    const countMap: Record<number, number> = {};
+    if (departments) {
+      for (const dep of departments) {
+        const employeesCount = await this.prisma.employee.count({
           where: {
             department: dep.id
           }
-        }).catch(async (e) => this.handleError(e));
-
-        if (employeesInDep) {
-          countMap.set(dep.id, employeesInDep.length + 1);
-          //await countArr.push([dep.id, employeesInDep.length])
+        }).catch((e) => this.handleError(e));
+        if (employeesCount) {
+          countMap[dep.id] = employeesCount;
         }
-      })
+      }
     }
-
-    for (let value of countMap.values()) {
-      console.log(value);
-    }
-    //console.log(countMap);
-    countArr.sort((a, b) => {
-      return a[1] - b[1];
-    })
-
-    return countArr;
+    console.log(countMap);
+    return countMap;
 
   }
 
