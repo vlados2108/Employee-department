@@ -1,4 +1,5 @@
 import { Department, Employee, PrismaClient } from '@prisma/client'
+import { number } from 'zod';
 
 
 
@@ -21,6 +22,15 @@ export class Prisma {
       where: { id: id }
     }).catch(async (e) => this.handleError(e))
     return Employee
+  }
+
+  async getEmployeesInDepartment(depId: number) {
+    const employeesInDep = await this.prisma.employee.findMany({
+      where: {
+        department: depId
+      }
+    }).catch(async (e) => this.handleError(e));
+    return employeesInDep;
   }
 
   async createEmployee(data: Employee) {
@@ -65,15 +75,58 @@ export class Prisma {
   }
 
   async getTopFiveDepartments() {
+    const departmnets = await this.prisma.department.findMany()
+      .catch(async (e) => this.handleError(e))
+
+    let countMap = new Map<number, number>();
+    let countArr: Array<[number, number]> = [];
+    if (departmnets) {
+      departmnets.forEach(async (dep) => {
+        const employeesInDep = await this.prisma.employee.findMany({
+          where: {
+            department: dep.id
+          }
+        }).catch(async (e) => this.handleError(e));
+
+        if (employeesInDep) {
+          countMap.set(dep.id, employeesInDep.length + 1);
+          //await countArr.push([dep.id, employeesInDep.length])
+        }
+      })
+    }
+
+    for (let value of countMap.values()) {
+      console.log(value);
+    }
+    //console.log(countMap);
+    countArr.sort((a, b) => {
+      return a[1] - b[1];
+    })
+
+    return countArr;
 
   }
 
   async getLeaderOfDepartment(depId: number) {
-
+    const leaderOfDep = await this.prisma.employee.findMany({
+      where: {
+        department: depId,
+        is_leader: true
+      }
+    }).catch(async (e) => this.handleError(e));
+    return leaderOfDep;
   }
 
   async getCountOfEmployeesInDepartment(depId: number) {
+    // const employeesInDep = await this.prisma.employee.findMany({
+    //   where: {
+    //     department: depId
+    //   }
+    // }).catch(async (e) => this.handleError(e));
+    const employeesInDep = this.getEmployeesInDepartment(depId).then
 
+    if (employeesInDep)
+      return employeesInDep.length + 1;
   }
 
   /*Close db connection*/
