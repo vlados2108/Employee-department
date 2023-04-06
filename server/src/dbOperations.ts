@@ -23,14 +23,14 @@ export class Prisma {
   /*Emloyee operations*/
   async getEmployeees() {
     const allEmployees = await this.prisma.employee.findMany()
-      .catch(async (e) => this.handleError(e))
+      .catch((e) => this.handleError(e))
     return allEmployees
   }
 
   async getEployeeById(id: number) {
     const Employee = await this.prisma.employee.findUnique({
       where: { id: id }
-    }).catch(async (e) => this.handleError(e))
+    }).catch((e) => this.handleError(e))
     return Employee
   }
 
@@ -39,13 +39,13 @@ export class Prisma {
       where: {
         department: depId
       }
-    }).catch(async (e) => this.handleError(e));
+    }).catch((e) => this.handleError(e));
     return employeesInDep;
   }
 
   async createEmployee(data: Employee) {
     const eployee = await this.prisma.employee.create({ data })
-      .catch(async (e) => this.handleError(e));
+      .catch((e) => this.handleError(e));
   }
 
   async deleteEmployeeById(id: number) {
@@ -67,14 +67,14 @@ export class Prisma {
         }
       }
     })
-      .catch(async (e) => this.handleError(e))
+      .catch((e) => this.handleError(e))
     return fiveLastAddedEmployees
   }
 
   /*Department operations*/
   async getDepartments() {
     const allDepartnents = await this.prisma.department.findMany()
-      .catch(async (e) => this.handleError(e))
+      .catch((e) => this.handleError(e))
     return allDepartnents
   }
 
@@ -82,13 +82,13 @@ export class Prisma {
     const Department = await this.prisma.department.findUnique({
       where: { id: id }
     })
-      .catch(async (e) => this.handleError(e))
+      .catch((e) => this.handleError(e))
     return Department
   }
 
   async createDepartment(data: Department) {
     const eployee = await this.prisma.department.create({ data })
-      .catch(async (e) => this.handleError(e));
+      .catch((e) => this.handleError(e));
   }
 
   async deleteDepartmentById(id: number) {
@@ -97,7 +97,7 @@ export class Prisma {
         id: id
       }
     })
-      .catch(async (e) => this.handleError(e));
+      .catch((e) => this.handleError(e));
   }
 
 
@@ -129,7 +129,7 @@ export class Prisma {
         department: depId,
         is_leader: true
       }
-    }).catch(async (e) => this.handleError(e));
+    }).catch((e) => this.handleError(e));
     return leaderOfDep;
   }
 
@@ -147,7 +147,8 @@ export class Prisma {
 
   /*Close db connection*/
   async disconnect() {
-    await this.prisma.$disconnect().catch(async (e) => this.handleError(e))
+    await this.prisma.$disconnect()
+      .catch((e) => this.handleError(e))
   }
 
   /*Handling errors*/

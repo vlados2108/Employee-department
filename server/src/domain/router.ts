@@ -20,6 +20,13 @@ export const employeeRouter = router({
             const employee = prisma.getEployeeById(input);
             return employee;
         }),
+    getEmployeesInDepartment: publicProcedure
+        .input(z.number())
+        .query((req) => {
+            const { input } = req;
+            const employeesInDep = prisma.getEmployeesInDepartment(input);
+            return employeesInDep;
+        }),
     createEmployee: publicProcedure
         .input(z.object({
             id: z.number(),
@@ -33,7 +40,20 @@ export const employeeRouter = router({
         .mutation((req) => {
             const { input } = req;
             prisma.createEmployee(input);
+        }),
+    deleteEmployeeById: publicProcedure
+        .input(z.number())
+        .query((req) => {
+            const { input } = req;
+            const employeesInDep = prisma.deleteEmployeeById(input);
+            return employeesInDep;
+        }),
+    getFiveLatestAddedEmployees: publicProcedure
+        .query(() => {
+            const fiveLatestAddedEmployees = prisma.getFiveLatestAddedEmployees();
+            return fiveLatestAddedEmployees;
         })
+
 })
 
 export const departmentRouter = router({
@@ -62,5 +82,31 @@ export const departmentRouter = router({
         .mutation((req) => {
             const { input } = req;
             prisma.createDepartment(input);
-        })
+        }),
+    deleteDepartmentById: publicProcedure
+        .input(z.number())
+        .query((req) => {
+            const { input } = req;
+            prisma.deleteDepartmentById(input);
+        }),
+    getTopFiveDepartments: publicProcedure
+        .query(() => {
+            const topFiveDepartments = prisma.getTopFiveDepartments();
+            return topFiveDepartments;
+        }),
+    getLeaderOfDepartment: publicProcedure
+        .input(z.number())
+        .query((req) => {
+            const { input } = req;
+            const leader = prisma.getLeaderOfDepartment(input);
+            return leader;
+        }),
+    getCountOfEmployeesInDepartment: publicProcedure
+        .input(z.number())
+        .query((req) => {
+            const { input } = req;
+            const leader = prisma.getLeaderOfDepartment(input);
+            return leader;
+        }),
+
 })
