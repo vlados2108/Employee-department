@@ -1,5 +1,6 @@
 import { router } from './trps';
-import { employeeRouter, departmentRouter } from './domain/router';
+import { employeeRouter } from './domain/EmployeeRouter';
+import { departmentRouter } from './domain/DepartmentRouter';
 
 export const appRouter = router({
     employeeRouter: employeeRouter,
