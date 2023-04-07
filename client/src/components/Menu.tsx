@@ -5,8 +5,14 @@ import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-rou
 import Dashbord from "./Dashbord";
 import Departments from "./Departments";
 import Employees from "./Employees";
+import { Department, Employee } from "../../../server/node_modules/.prisma/client"
+import { DepartmentData } from "../types/types"
 
-function Menu() {
+interface IProps {
+    departments: DepartmentData;
+}
+
+function Menu(data: DepartmentData) {
     return (
         <>
 
@@ -34,7 +40,7 @@ function Menu() {
                 <Routes>
                     <Route path="/" element={<div />} />
                     <Route path="/dashboard" element={<Dashbord />} />
-                    <Route path="/departments" element={<Departments />} />
+                    <Route path="/departments" element={<Departments departments={data} />} />
                     <Route path="/employees" element={<Employees />} />
                 </Routes>
             </Router>

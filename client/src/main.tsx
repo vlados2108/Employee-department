@@ -7,6 +7,7 @@ import {
 import { trpc, trpcClient } from './trpc';
 import App from './App'
 import './style/index.css'
+import { } from "./style/table.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
