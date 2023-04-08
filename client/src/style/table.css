@@ -18,3 +18,12 @@
     color: #fff;
     font-size: 150%;
 }
+
+.cell.dark {
+    border: 1px solid black;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #333131;
+    color: #fff;
+    font-size: 150%;
+}
