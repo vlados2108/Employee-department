@@ -22,14 +22,9 @@ import {
   Department,
   Employee,
 } from "../../../server/node_modules/.prisma/client";
-import { Deps, Empl } from "../types/types";
+import { Deps, Empls } from "../types/types";
 
-interface IProps {
-  departments: Deps;
-  employees: Empl;
-}
-
-function Menu(props: IProps) {
+function Menu() {
   return (
     <>
       <Router>
@@ -80,11 +75,11 @@ function Menu(props: IProps) {
           <Route path="/dashboard" element={<Dashbord />} />
           <Route
             path="/departments"
-            element={<Departments departments={props.departments} />}
+            element={<Departments />}
           />
           <Route
             path="/employees"
-            element={<Employees employees={props.employees} />}
+            element={<Employees />}
           />
         </Routes>
       </Router>

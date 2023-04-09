@@ -1,10 +1,13 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Empl } from "../types/types";
+import { Empls } from "../types/types";
 import { trpc } from "../trpc";
 interface IEmployees {
-  employees: Empl;
+  employees: Empls;
 }
-function Employees({ employees }: IEmployees) {
+function Employees() {
+  const [employees, setEmployees] = useState(
+    trpc.employeeRouter.getEmployees.useQuery().data
+  );
   const rowsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   let totalPages = 0;
@@ -12,7 +15,7 @@ function Employees({ employees }: IEmployees) {
     totalPages = Math.ceil((employees.length + 1) / rowsPerPage);
   }
 
-  const handleClick = (page:number) => {
+  const handleClick = (page: number) => {
     setCurrentPage(page);
   };
 
@@ -27,7 +30,7 @@ function Employees({ employees }: IEmployees) {
     },
     [employees]
   );
-
+  const handleDeleteEmployee = (id: number) => {};
   return (
     <>
       <div className="flex-container">
@@ -37,6 +40,7 @@ function Employees({ employees }: IEmployees) {
           <div className="cell dark">Last name</div>
           <div className="cell dark">Company</div>
           <div className="cell dark">Date of adding</div>
+          <div className="cell dark">Trash</div>
           {rowsToDisplay
             ? rowsToDisplay.map((employee) => (
                 <>
@@ -46,6 +50,11 @@ function Employees({ employees }: IEmployees) {
                   <div className="cell">{employee.company}</div>
                   <div className="cell">
                     {reformateDate(employee.created_at || "")}
+                  </div>
+                  <div className="cell">
+                    <button onClick={() => handleDeleteEmployee(employee.id)}>
+                      Delete
+                    </button>
                   </div>
                 </>
               ))

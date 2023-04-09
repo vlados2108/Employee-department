@@ -1,10 +1,10 @@
-import { Prisma } from "./dbOperations"
+import { DepartmentService } from "./Services/DepartmentService";
 
-const prisma = new Prisma()
+const departmentService = new DepartmentService();
 
 const a = async () => {
-    const result = await prisma.getTopFiveDepartments();
-    console.log(result);
-}
+  const result = await departmentService.createDepartment({id:7,name:"crime",description:"desc crime",created_at:new Date(Date.now())});
+  console.log(result);
+};
 
 a();

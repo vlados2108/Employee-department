@@ -7,5 +7,7 @@ export const employeeSchema = z.object({
     position: z.string(),
     department: z.number(),
     salary: z.number(),
-    is_leader: z.boolean()
+    is_leader: z.boolean(),
+    created_at: z.date(),
+    company: z.string()
 })

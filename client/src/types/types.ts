@@ -3,18 +3,11 @@ import { Department, Employee } from "../../../server/node_modules/.prisma/clien
 import { trpc } from "../trpc";
 
 const deps = trpc.departmentRouter.getDepartments.useQuery()
-const empl = trpc.employeeRouter.getEmployees.useQuery()
-export type UndefinedToOptional<T> = {
-    [P in keyof T]?: T[P];
-};
-
-export interface DepartmentData {
-    data: SerializeObject<UndefinedToOptional<Department>>[] | undefined;
-}
-
-export interface EmployeeData {
-    data: SerializeObject<UndefinedToOptional<Employee>>[] | undefined;
-}
+const empls = trpc.employeeRouter.getEmployees.useQuery()
+const dep = trpc.departmentRouter.getDepartmentById.useQuery(1)
+const empl = trpc.employeeRouter.getEmployeeById.useQuery(1)
 
 export type Deps = typeof deps.data
-export type Empl = typeof empl.data
+export type Empls = typeof empls.data
+export type Dep = typeof dep.data
+export type empl = typeof empl.data
