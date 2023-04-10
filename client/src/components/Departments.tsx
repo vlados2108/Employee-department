@@ -4,11 +4,13 @@ import { trpc } from "../trpc";
 import { Deps, Dep, NewDepartment } from "../types/types";
 import CreateDepartment from "./CreateDepartment";
 
-const Departments = () => {
-  const [departments, setDepartments] = useState(
-    trpc.departmentRouter.getDepartments.useQuery().data
-  );
-
+interface IProps {
+  deps: Deps;
+}
+const Departments = (props: IProps) => {
+  const [departments, setDepartments] = useState(props.deps);
+  const mutation = trpc.departmentRouter.createDepartment.useMutation();
+  const deleteMutation = trpc.departmentRouter.deleteDepartmentById.useMutation();
   const rowsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   let totalPages = 0;
@@ -27,18 +29,16 @@ const Departments = () => {
     ) || [];
 
   const handleAddDepartment = (newDepartment: NewDepartment) => {
-    const mutation = trpc.departmentRouter.createDepartment.useMutation();
     mutation.mutate(newDepartment);
   };
 
-  const handleDeleteDepartment = async (id: number) => {
+  const handleDeleteDepartment = (id: number) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this department?"
     );
     if (isConfirmed) {
-      const mutation =
-        await trpc.departmentRouter.deleteDepartmentById.useMutation();
-      mutation.mutate(id);
+     
+      deleteMutation.mutate(id);
       // setDepartments((departments) =>
       //   departments?.filter((department) => {
       //     return department.id != id;
@@ -63,9 +63,8 @@ const Departments = () => {
   const getLeaderOfDepartment = (departmentId: number) => {
     const leader =
       trpc.departmentRouter.getLeaderOfDepartment.useQuery(departmentId).data;
-    if (leader)
-      return leader.name
-    return ""
+    if (leader) return leader.name;
+    return "";
   };
 
   //useMemo
@@ -90,7 +89,9 @@ const Departments = () => {
                   <div className="cell">
                     {getLeaderOfDepartment(department.id)}
                   </div>
-                  <div className="cell">{reformateDate(department.created_at || "")}</div>
+                  <div className="cell">
+                    {reformateDate(department.created_at || "")}
+                  </div>
                   <div className="cell">
                     <button
                       onClick={() => handleDeleteDepartment(department.id)}
@@ -110,10 +111,9 @@ const Departments = () => {
           </button>
         ))}
       </div>
-      <CreateDepartment onAdd={handleAddDepartment}/>
+      <CreateDepartment onAdd={handleAddDepartment} />
     </>
   );
 };
 
 export default Departments;
-

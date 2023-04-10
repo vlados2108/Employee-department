@@ -34,7 +34,8 @@ export const departmentRouter = router({
     return leader;
   }),
   getCountOfDepartments: publicProcedure.query(async ()=>{
-    return await departmentService.getCountOfDepartments();
+    const count = await departmentService.getCountOfDepartments();
+    return count
   }),
   getCountOfEmployeesInDepartment: publicProcedure
     .input(numberSchema)

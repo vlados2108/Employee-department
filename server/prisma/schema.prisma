@@ -8,16 +8,16 @@ datasource db {
 }
 
 model Employee {
-  id         Int        @id @default(autoincrement())
-  name       String     @default("\"\"")
-  last_name  String     @default("\"\"")
+  id         Int         @id @default(autoincrement())
+  name       String      @default("\"\"")
+  last_name  String      @default("\"\"")
   position   String
-  department Int
+  department Int?
   salary     Int
   is_leader  Boolean
-  created_at DateTime   @db.Date
+  created_at DateTime    @db.Date
   company    String
-  Department Department @relation(fields: [department], references: [id], onUpdate: NoAction)
+  Department Department? @relation(fields: [department], references: [id], onDelete: Restrict, onUpdate: NoAction)
 }
 
 model Department {

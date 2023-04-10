@@ -1,13 +1,17 @@
 import React, { useCallback, useMemo, useState } from "react";
-import { Empls } from "../types/types";
+import { Empls, NewEmployee } from "../types/types";
 import { trpc } from "../trpc";
+import CreateEmployee from "./CreateEmployee";
 interface IEmployees {
   employees: Empls;
 }
-function Employees() {
-  const [employees, setEmployees] = useState(
-    trpc.employeeRouter.getEmployees.useQuery().data
-  );
+
+interface IProps {
+  empls: Empls;
+}
+const Employees = (props: IProps) => {
+  const [employees, setEmployees] = useState(props.empls);
+  const deleteMutation = trpc.employeeRouter.deleteEmployeeById.useMutation();
   const rowsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(1);
   let totalPages = 0;
@@ -25,12 +29,18 @@ function Employees() {
   );
   const reformateDate = useCallback(
     (date: string) => {
-      console.log(date);
       return new Date(date).toLocaleDateString();
     },
     [employees]
   );
-  const handleDeleteEmployee = (id: number) => {};
+
+  const handleAddEmployee = (newEmployee: NewEmployee) => {};
+  const handleDeleteEmployee = (id: number) => {
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this employee?"
+    );
+    if (isConfirmed) deleteMutation.mutate(id);
+  };
   return (
     <>
       <div className="flex-container">
@@ -68,8 +78,9 @@ function Employees() {
           </button>
         ))}
       </div>
+      <CreateEmployee onAdd={handleAddEmployee} />
     </>
   );
-}
+};
 
 export default Employees;

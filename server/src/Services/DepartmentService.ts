@@ -55,6 +55,14 @@ export class DepartmentService {
   }
 
   async deleteDepartmentById(id: number) {
+    await this.prisma.employee.updateMany({
+      where:{
+        department:id
+      },
+      data:{
+        department:null
+      }
+    })
     await this.prisma.department
       .delete({
         where: {
